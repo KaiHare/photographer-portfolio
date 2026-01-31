@@ -4,15 +4,46 @@ import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { Alert } from "@/components/ui/alert";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { getAlbums, type Album } from "@/lib/data";
+import { Spinner } from "@/components/ui/spinner";
+import { listAlbums } from "@/lib/api";
+import type { Album } from "@/lib/types";
 
 type HomeProps = {
   albums: Album[];
+  error?: string | null;
 };
 
-export default function Home({ albums }: HomeProps) {
+export default function Home({ albums, error }: HomeProps) {
   const featured = albums.slice(0, 2);
+
+  if (error) {
+    return (
+      <div className="grain min-h-screen">
+        <SiteHeader />
+        <main className="container-padded py-16">
+          <Alert title="加载失败" description={error} />
+        </main>
+        <SiteFooter />
+      </div>
+    );
+  }
+
+  if (!albums.length) {
+    return (
+      <div className="grain min-h-screen">
+        <SiteHeader />
+        <main className="container-padded py-16">
+          <div className="flex items-center gap-3 text-sm text-ink/60">
+            <Spinner />
+            正在加载相册数据...
+          </div>
+        </main>
+        <SiteFooter />
+      </div>
+    );
+  }
 
   return (
     <div className="grain min-h-screen">
@@ -52,7 +83,7 @@ export default function Home({ albums }: HomeProps) {
             <CardContent className="space-y-6">
               <div className="aspect-[4/5] w-full overflow-hidden rounded-2xl">
                 <img
-                  src={albums[0]?.coverUrl}
+                  src={albums[0]?.coverThumbUrl}
                   alt={albums[0]?.title}
                   className="h-full w-full object-cover"
                 />
@@ -62,7 +93,8 @@ export default function Home({ albums }: HomeProps) {
                   {albums[0]?.title}
                 </h2>
                 <p className="text-sm text-ink/60">
-                  {albums[0]?.year} · {albums[0]?.location}
+                  {albums[0] ? new Date(albums[0].createdAt).getFullYear() : ""}
+                  {albums[0] ? " · " + albums[0].status : ""}
                 </p>
               </div>
             </CardContent>
@@ -87,7 +119,7 @@ export default function Home({ albums }: HomeProps) {
               >
                 <div className="aspect-[5/3] overflow-hidden rounded-2xl">
                   <img
-                    src={album.coverUrl}
+                    src={album.coverThumbUrl}
                     alt={album.title}
                     className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
                   />
@@ -96,10 +128,7 @@ export default function Home({ albums }: HomeProps) {
                   <h3 className="text-xl font-semibold font-display">
                     {album.title}
                   </h3>
-                  <p className="text-sm text-ink/60">{album.summary}</p>
-                  <p className="text-xs uppercase tracking-[0.3em] text-ink/40">
-                    {album.year} · {album.location}
-                  </p>
+                  <p className="text-sm text-ink/60">{album.description}</p>
                 </div>
               </Link>
             ))}
@@ -112,9 +141,19 @@ export default function Home({ albums }: HomeProps) {
 }
 
 export async function getStaticProps() {
-  return {
-    props: {
-      albums: getAlbums(),
-    },
-  };
+  try {
+    const albums = await listAlbums();
+    return {
+      props: {
+        albums,
+      },
+    };
+  } catch (error) {
+    return {
+      props: {
+        albums: [],
+        error: error instanceof Error ? error.message : "Unknown error",
+      },
+    };
+  }
 }

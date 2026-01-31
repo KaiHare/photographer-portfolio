@@ -1,24 +1,55 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 
+import { Alert } from "@/components/ui/alert";
+import { Spinner } from "@/components/ui/spinner";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { getAlbumBySlug, getAlbums, type Album, type Photo } from "@/lib/data";
+import { getAlbum, listAlbums } from "@/lib/api";
+import type { AlbumDetail, Photo } from "@/lib/types";
 
 type AlbumDetailProps = {
-  album: Album;
+  album: AlbumDetail | null;
+  error?: string | null;
 };
 
-export default function AlbumDetail({ album }: AlbumDetailProps) {
+export default function AlbumDetail({ album, error }: AlbumDetailProps) {
   const [selected, setSelected] = useState<Photo | null>(null);
   const lightboxLabel = useMemo(() => {
     if (!selected) {
       return "";
     }
-    return `${selected.title} · ${selected.location}`;
+    return `${selected.caption} · ${new Date(selected.createdAt).getFullYear()}`;
   }, [selected]);
+
+  if (error) {
+    return (
+      <div className="grain min-h-screen">
+        <SiteHeader />
+        <main className="container-padded py-16">
+          <Alert title="加载失败" description={error} />
+        </main>
+        <SiteFooter />
+      </div>
+    );
+  }
+
+  if (!album) {
+    return (
+      <div className="grain min-h-screen">
+        <SiteHeader />
+        <main className="container-padded py-16">
+          <div className="flex items-center gap-3 text-sm text-ink/60">
+            <Spinner />
+            正在加载相册...
+          </div>
+        </main>
+        <SiteFooter />
+      </div>
+    );
+  }
 
   return (
     <div className="grain min-h-screen">
@@ -30,33 +61,33 @@ export default function AlbumDetail({ album }: AlbumDetailProps) {
           </Link>
           <div>
             <p className="text-xs uppercase tracking-[0.3em] text-ink/50">
-              {album.year} · {album.location}
+              {album.status} · {new Date(album.createdAt).getFullYear()}
             </p>
             <h1 className="text-3xl font-semibold font-display md:text-5xl">
               {album.title}
             </h1>
           </div>
         </div>
-        <p className="mt-4 max-w-2xl text-sm text-ink/60">{album.summary}</p>
+        <p className="mt-4 max-w-2xl text-sm text-ink/60">{album.description}</p>
 
         <section className="mt-10 grid gap-5 md:grid-cols-3">
           {album.photos.map((photo) => (
             <button
-              key={photo.id}
+              key={photo.photoId}
               type="button"
               onClick={() => setSelected(photo)}
               className="group relative overflow-hidden rounded-3xl border border-ink/10 bg-white/80 text-left shadow-[0_18px_40px_rgba(0,0,0,0.08)] backdrop-blur transition hover:-translate-y-1"
             >
               <div className="aspect-[4/5] overflow-hidden">
                 <img
-                  src={photo.url}
-                  alt={photo.title}
+                  src={photo.displayUrl}
+                  alt={photo.caption}
                   className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
                 />
               </div>
               <div className="flex items-center justify-between px-4 py-3 text-xs uppercase tracking-[0.3em] text-ink/40">
-                <span>{photo.title}</span>
-                <span>{photo.location}</span>
+                <span>{photo.caption}</span>
+                <span>{new Date(photo.createdAt).getFullYear()}</span>
               </div>
             </button>
           ))}
@@ -79,8 +110,8 @@ export default function AlbumDetail({ album }: AlbumDetailProps) {
             </div>
             <div className="bg-black">
               <img
-                src={selected.url}
-                alt={selected.title}
+                src={selected.displayUrl}
+                alt={selected.caption}
                 className="max-h-[70vh] w-full object-contain"
               />
             </div>
@@ -92,7 +123,7 @@ export default function AlbumDetail({ album }: AlbumDetailProps) {
 }
 
 export async function getStaticPaths() {
-  const albums = getAlbums();
+  const albums = await listAlbums();
 
   return {
     paths: albums.map((album) => ({ params: { slug: album.slug } })),
@@ -101,17 +132,26 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }: { params: { slug: string } }) {
-  const album = getAlbumBySlug(params.slug);
+  try {
+    const album = await getAlbum(params.slug);
 
-  if (!album) {
+    if (!album) {
+      return {
+        notFound: true,
+      };
+    }
+
     return {
-      notFound: true,
+      props: {
+        album,
+      },
+    };
+  } catch (error) {
+    return {
+      props: {
+        album: null,
+        error: error instanceof Error ? error.message : "Unknown error",
+      },
     };
   }
-
-  return {
-    props: {
-      album,
-    },
-  };
 }

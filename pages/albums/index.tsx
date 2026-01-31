@@ -1,14 +1,45 @@
 import Link from "next/link";
 
+import { Alert } from "@/components/ui/alert";
+import { Spinner } from "@/components/ui/spinner";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
-import { getAlbums, type Album } from "@/lib/data";
+import { listAlbums } from "@/lib/api";
+import type { Album } from "@/lib/types";
 
 type AlbumsProps = {
   albums: Album[];
+  error?: string | null;
 };
 
-export default function Albums({ albums }: AlbumsProps) {
+export default function Albums({ albums, error }: AlbumsProps) {
+  if (error) {
+    return (
+      <div className="grain min-h-screen">
+        <SiteHeader />
+        <main className="container-padded py-16">
+          <Alert title="加载失败" description={error} />
+        </main>
+        <SiteFooter />
+      </div>
+    );
+  }
+
+  if (!albums.length) {
+    return (
+      <div className="grain min-h-screen">
+        <SiteHeader />
+        <main className="container-padded py-16">
+          <div className="flex items-center gap-3 text-sm text-ink/60">
+            <Spinner />
+            正在加载相册数据...
+          </div>
+        </main>
+        <SiteFooter />
+      </div>
+    );
+  }
+
   return (
     <div className="grain min-h-screen">
       <SiteHeader />
@@ -37,7 +68,7 @@ export default function Albums({ albums }: AlbumsProps) {
             >
               <div className="aspect-[4/3] overflow-hidden rounded-2xl">
                 <img
-                  src={album.coverUrl}
+                  src={album.coverThumbUrl}
                   alt={album.title}
                   className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
                 />
@@ -46,12 +77,7 @@ export default function Albums({ albums }: AlbumsProps) {
                 <h2 className="text-2xl font-semibold font-display">
                   {album.title}
                 </h2>
-                <p className="text-sm text-ink/60">{album.summary}</p>
-                <div className="flex items-center gap-3 text-xs uppercase tracking-[0.3em] text-ink/40">
-                  <span>{album.year}</span>
-                  <span>•</span>
-                  <span>{album.location}</span>
-                </div>
+                <p className="text-sm text-ink/60">{album.description}</p>
               </div>
             </Link>
           ))}
@@ -63,9 +89,19 @@ export default function Albums({ albums }: AlbumsProps) {
 }
 
 export async function getStaticProps() {
-  return {
-    props: {
-      albums: getAlbums(),
-    },
-  };
+  try {
+    const albums = await listAlbums();
+    return {
+      props: {
+        albums,
+      },
+    };
+  } catch (error) {
+    return {
+      props: {
+        albums: [],
+        error: error instanceof Error ? error.message : "Unknown error",
+      },
+    };
+  }
 }

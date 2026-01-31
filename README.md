@@ -39,5 +39,11 @@
 - This is a real project intended for production deployment, not a demo
 
 ## Build & serve (acceptance)
-1) `npm run build`
-2) `npm run serve` (serves the static `out` directory)
+1) `npm ci`
+2) `npm run build`
+3) `npm run serve`（默认使用 `npx serve out`，可加 `--listen 5000` 指定端口）
+
+验收 checklist：
+- 启动静态服务后打开 `http://localhost:5000/albums/`（或 serve 输出的端口）
+- 点击任意相册 slug 页面，内容正常展示（无 /api/mock 请求）
+- 点击任意缩略图，弹层正常打开并可关闭
