@@ -1,11 +1,10 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 
 import { Alert } from "@/components/ui/alert";
 import { Spinner } from "@/components/ui/spinner";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
-import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { getAlbum, listAlbums } from "@/lib/api";
 import type { AlbumDetail, Photo } from "@/lib/types";
@@ -17,12 +16,40 @@ type AlbumDetailProps = {
 
 export default function AlbumDetail({ album, error }: AlbumDetailProps) {
   const [selected, setSelected] = useState<Photo | null>(null);
+  const [index, setIndex] = useState<number>(-1);
+
   const lightboxLabel = useMemo(() => {
     if (!selected) {
       return "";
     }
     return `${selected.caption} · ${new Date(selected.createdAt).getFullYear()}`;
   }, [selected]);
+
+  useEffect(() => {
+    if (index >= 0 && album) {
+      setSelected(album.photos[index]);
+    }
+  }, [album, index]);
+
+  useEffect(() => {
+    const handler = (event: KeyboardEvent) => {
+      if (!album) return;
+      if (event.key === "Escape") {
+        setSelected(null);
+        setIndex(-1);
+      }
+      if (selected) {
+        if (event.key === "ArrowRight") {
+          setIndex((prev) => (prev + 1) % album.photos.length);
+        }
+        if (event.key === "ArrowLeft") {
+          setIndex((prev) => (prev - 1 + album.photos.length) % album.photos.length);
+        }
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [album, selected]);
 
   if (error) {
     return (
@@ -55,40 +82,57 @@ export default function AlbumDetail({ album, error }: AlbumDetailProps) {
     <div className="grain min-h-screen">
       <SiteHeader />
       <main className="container-padded py-16">
-        <div className="flex flex-wrap items-center gap-4">
-          <Link className={cn(buttonVariants({ variant: "outline" }))} href="/albums">
-            Back to albums
-          </Link>
-          <div>
-            <p className="text-xs uppercase tracking-[0.3em] text-ink/50">
-              {album.status} · {new Date(album.createdAt).getFullYear()}
+        <div className="flex flex-wrap items-start justify-between gap-6 pb-10 max-w-5xl">
+          <div className="space-y-4">
+            <Link className="text-xs uppercase tracking-[0.3em] text-muted hover:text-ink" href="/albums">
+              ← 返回作品
+            </Link>
+            <p className="text-[11px] uppercase tracking-[0.35em] text-muted">
+              已发布 · {new Date(album.createdAt).getFullYear()}
             </p>
-            <h1 className="text-3xl font-semibold font-display md:text-5xl">
+            <h1 className="text-4xl font-semibold font-display md:text-5xl leading-tight text-ink">
               {album.title}
             </h1>
+            <p className="mt-4 max-w-2xl text-sm leading-7 text-muted">{album.description}</p>
           </div>
         </div>
-        <p className="mt-4 max-w-2xl text-sm text-ink/60">{album.description}</p>
 
-        <section className="mt-10 grid gap-5 md:grid-cols-3">
-          {album.photos.map((photo) => (
+        <div className="w-full bg-white/60">
+          <div className="mx-auto max-w-5xl px-6 py-12">
+            <div className="flex flex-col gap-3">
+              <Link className="text-xs uppercase tracking-[0.28em] text-muted hover:text-ink" href="/albums">
+                ← 返回作品
+              </Link>
+              <p className="text-[11px] uppercase tracking-[0.3em] text-muted">
+                已发布 · {new Date(album.createdAt).getFullYear()}
+              </p>
+              <h1 className="text-4xl md:text-5xl font-semibold font-display text-ink leading-tight">
+                {album.title}
+              </h1>
+              <p className="max-w-3xl text-sm leading-7 text-muted">
+                {album.description}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <section className="mt-12 grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 px-2 md:px-3">
+          {album.photos.slice(1).map((photo) => (
             <button
               key={photo.photoId}
               type="button"
-              onClick={() => setSelected(photo)}
-              className="group relative overflow-hidden rounded-3xl border border-ink/10 bg-white/80 text-left shadow-[0_18px_40px_rgba(0,0,0,0.08)] backdrop-blur transition hover:-translate-y-1"
+              onClick={() => {
+                const idx = album.photos.findIndex((p) => p.photoId === photo.photoId);
+                setIndex(idx);
+                setSelected(photo);
+              }}
+              className="group relative overflow-hidden text-left transition"
             >
-              <div className="aspect-[4/5] overflow-hidden">
-                <img
-                  src={photo.displayUrl}
-                  alt={photo.caption}
-                  className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
-                />
-              </div>
-              <div className="flex items-center justify-between px-4 py-3 text-xs uppercase tracking-[0.3em] text-ink/40">
-                <span>{photo.caption}</span>
-                <span>{new Date(photo.createdAt).getFullYear()}</span>
-              </div>
+              <img
+                src={photo.displayUrl}
+                alt={photo.caption}
+                className="h-full w-full rounded-none object-cover transition duration-500 group-hover:scale-105 group-hover:opacity-85 border border-line/60"
+              />
             </button>
           ))}
         </section>
@@ -96,24 +140,54 @@ export default function AlbumDetail({ album, error }: AlbumDetailProps) {
       <SiteFooter />
 
       {selected && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-6">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--lightbox-bg)] p-6 text-white">
           <button
             type="button"
             onClick={() => setSelected(null)}
             className="absolute inset-0 h-full w-full cursor-zoom-out"
             aria-label="Close lightbox"
           />
-          <div className="relative z-10 w-full max-w-4xl overflow-hidden rounded-3xl bg-white shadow-2xl">
-            <div className="flex items-center justify-between border-b border-ink/10 px-5 py-4 text-sm uppercase tracking-[0.3em] text-ink/50">
-              <span>Lightbox</span>
-              <span>{lightboxLabel}</span>
+          <div className="relative z-10 flex w-full max-w-5xl flex-col gap-3">
+            <div className="flex items-center justify-between text-[11px] uppercase tracking-[0.35em] text-white/70 font-display">
+              <span className="font-display">{album.title}</span>
+              <span>
+                第 {index + 1} / {album.photos.length} 张
+              </span>
             </div>
-            <div className="bg-black">
+            <div className="relative bg-black">
               <img
                 src={selected.displayUrl}
                 alt={selected.caption}
-                className="max-h-[70vh] w-full object-contain"
+                className="max-h-[75vh] w-full object-contain"
               />
+              <div className="absolute inset-y-0 left-0 flex items-center pl-3">
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIndex((prev) => (prev - 1 + album.photos.length) % album.photos.length);
+                  }}
+                  className="rounded-sm border border-white/25 bg-white/5 px-3 py-2 text-[11px] uppercase tracking-[0.2em] text-white/60 hover:text-white/90 hover:bg-white/10 hover:border-white/40 focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-accent-2"
+                >
+                  ← Prev
+                </button>
+              </div>
+              <div className="absolute inset-y-0 right-0 flex items-center pr-3">
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIndex((prev) => (prev + 1) % album.photos.length);
+                  }}
+                  className="rounded-sm border border-white/25 bg-white/5 px-3 py-2 text-[11px] uppercase tracking-[0.2em] text-white/60 hover:text-white/90 hover:bg-white/10 hover:border-white/40 focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-accent-2"
+                >
+                  Next →
+                </button>
+              </div>
+            </div>
+            <div className="relative flex items-center justify-center text-[11px] tracking-[0.2em] text-white/70">
+              <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/55 to-transparent pointer-events-none" />
+              {lightboxLabel}
             </div>
           </div>
         </div>

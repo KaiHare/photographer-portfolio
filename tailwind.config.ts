@@ -9,14 +9,18 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        display: ["\"Fraunces\"", "serif"],
-        sans: ["\"Manrope\"", "ui-sans-serif", "system-ui", "sans-serif"],
+        display: ["var(--font-serif)", "\"Noto Serif SC\"", "serif"],
+        sans: ["var(--font-sans)", "\"Noto Sans SC\"", "ui-sans-serif", "system-ui", "sans-serif"],
       },
       colors: {
-        ink: "#0f0f0c",
-        bone: "#f5f1ea",
-        sand: "#e7dbc8",
-        clay: "#c58f6a",
+        ink: "var(--ink)",
+        bone: "var(--paper)",
+        muted: "var(--muted)",
+        line: "var(--line)",
+        "ink-strong": "var(--ink-strong)",
+        "accent-1": "var(--accent-1)",
+        "accent-2": "var(--accent-2)",
+        "accent-3": "var(--accent-3)",
       },
     },
   },

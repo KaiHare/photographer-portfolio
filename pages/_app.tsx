@@ -1,20 +1,22 @@
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
-import { Fraunces, Manrope } from "next/font/google";
+import { Noto_Sans_SC, Noto_Serif_SC } from "next/font/google";
 
-const displayFont = Fraunces({
+const serif = Noto_Serif_SC({
   subsets: ["latin"],
-  variable: "--font-display",
+  variable: "--font-serif",
+  weight: ["500", "600"],
 });
 
-const sansFont = Manrope({
+const sans = Noto_Sans_SC({
   subsets: ["latin"],
   variable: "--font-sans",
+  weight: ["400", "500", "600"],
 });
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <div className={`app-root ${displayFont.variable} ${sansFont.variable}`}>
+    <div className={`app-root ${serif.variable} ${sans.variable}`}>
       <Component {...pageProps} />
     </div>
   );

@@ -1,7 +1,7 @@
 export function SiteFooter() {
   return (
-    <footer className="border-t border-ink/10 bg-bone/70">
-      <div className="container-padded flex flex-col gap-2 py-10 text-sm text-ink/70 md:flex-row md:items-center md:justify-between">
+    <footer className="border-t border-line bg-bone/80">
+      <div className="container-padded flex flex-col gap-3 py-10 text-sm text-muted md:flex-row md:items-center md:justify-between">
         <div className="font-display text-base text-ink">
           Lumiere Atelier
         </div>

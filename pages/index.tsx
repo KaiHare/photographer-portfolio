@@ -5,7 +5,6 @@ import { SiteHeader } from "@/components/site/site-header";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Alert } from "@/components/ui/alert";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
 import { listAlbums } from "@/lib/api";
 import type { Album } from "@/lib/types";
@@ -50,85 +49,78 @@ export default function Home({ albums, error }: HomeProps) {
       <SiteHeader />
       <main>
         <section className="container-padded grid gap-10 py-16 md:grid-cols-[1.2fr_0.8fr] md:items-center">
-          <div className="space-y-6">
-            <p className="text-xs uppercase tracking-[0.35em] text-ink/60">
-              Documentary · Portrait · Editorial
+          <div className="space-y-5">
+            <p className="text-[11px] uppercase tracking-[0.4em] text-muted">
+              纪录 · 人像 · 叙事
             </p>
-            <h1 className="text-4xl font-semibold leading-tight text-ink md:text-6xl font-display">
-              A studio devoted to light, quiet stories, and slow photography.
+            <h1 className="text-4xl font-semibold leading-tight text-ink md:text-5xl font-display">
+              慢速影像的静态画册。
             </h1>
-            <p className="max-w-xl text-lg text-ink/70">
-              Lumiere Atelier curates photo albums with a tactile, cinematic
-              language. Each collection is arranged for immersive viewing and
-              ready to publish to a static-first web experience.
+            <p className="max-w-xl text-base leading-7 text-muted">
+              Lumiere Atelier 以画册逻辑编排影像，减去多余互动，保留纸张质感与沉浸观看体验。
             </p>
-            <div className="flex flex-wrap gap-3">
-              <Link className={cn(buttonVariants())} href="/albums">
-                Browse albums
+            <div className="flex flex-wrap gap-3 text-[12px] uppercase tracking-[0.3em]">
+              <Link className={cn(buttonVariants({ size: "sm" }), "h-10 px-6")} href="/albums">
+                查看作品
               </Link>
               <Link
-                className={cn(buttonVariants({ variant: "outline" }))}
+                className={cn(buttonVariants({ variant: "outline", size: "sm" }), "h-10 px-6")}
                 href="/admin"
               >
-                Admin workspace
+                管理
               </Link>
             </div>
           </div>
-          <Card className="overflow-hidden">
-            <CardHeader>
-              <p className="text-sm uppercase tracking-[0.3em] text-ink/50">
-                Current feature
+          <div className="space-y-3">
+            <p className="text-[11px] uppercase tracking-[0.35em] text-ink/60">
+              本期精选
+            </p>
+            <div className="overflow-hidden rounded-xl">
+              <img
+                src={albums[0]?.coverThumbUrl}
+                alt={albums[0]?.title}
+                className="h-full w-full object-cover"
+              />
+            </div>
+            <div className="space-y-1">
+              <h2 className="text-2xl font-semibold font-display">{albums[0]?.title}</h2>
+              <p className="text-sm text-ink/60">
+                {albums[0] ? new Date(albums[0].createdAt).getFullYear() : ""}
+                {albums[0] ? " · " + albums[0].status : ""}
               </p>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="aspect-[4/5] w-full overflow-hidden rounded-2xl">
-                <img
-                  src={albums[0]?.coverThumbUrl}
-                  alt={albums[0]?.title}
-                  className="h-full w-full object-cover"
-                />
-              </div>
-              <div>
-                <h2 className="text-2xl font-semibold font-display">
-                  {albums[0]?.title}
-                </h2>
-                <p className="text-sm text-ink/60">
-                  {albums[0] ? new Date(albums[0].createdAt).getFullYear() : ""}
-                  {albums[0] ? " · " + albums[0].status : ""}
-                </p>
-              </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </section>
 
         <section className="container-padded pb-20">
-          <div className="flex items-end justify-between">
-            <h2 className="text-2xl font-semibold font-display">
-              Featured albums
-            </h2>
-            <Link className="text-sm text-ink/60 hover:text-ink" href="/albums">
-              View all
+          <div className="flex items-center justify-between border-b border-line pb-3 max-w-5xl">
+            <h2 className="text-xl font-semibold font-display">精选系列</h2>
+            <Link className="text-[12px] uppercase tracking-[0.3em] text-muted hover:text-ink" href="/albums">
+              全部作品
             </Link>
           </div>
-          <div className="mt-8 grid gap-6 md:grid-cols-2">
+          <div className="mt-10 grid gap-8 md:grid-cols-2">
             {featured.map((album) => (
               <Link
                 key={album.slug}
                 href={`/albums/${album.slug}`}
-                className="group rounded-3xl border border-ink/10 bg-white/70 p-6 shadow-[0_18px_40px_rgba(0,0,0,0.08)] backdrop-blur transition hover:-translate-y-1"
+                className="group flex flex-col gap-3"
               >
-                <div className="aspect-[5/3] overflow-hidden rounded-2xl">
+                <div className="aspect-[5/3] overflow-hidden rounded-lg">
                   <img
                     src={album.coverThumbUrl}
                     alt={album.title}
-                    className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                    className="h-full w-full object-cover transition duration-500 group-hover:scale-105 group-hover:opacity-90"
                   />
                 </div>
-                <div className="mt-5 space-y-1">
-                  <h3 className="text-xl font-semibold font-display">
+                <div className="space-y-1">
+                  <p className="text-[11px] uppercase tracking-[0.3em] text-muted">
+                    {album.status} · {new Date(album.createdAt).getFullYear()}
+                  </p>
+                  <h3 className="text-lg font-semibold font-display text-ink group-hover:text-ink/80">
                     {album.title}
                   </h3>
-                  <p className="text-sm text-ink/60">{album.description}</p>
+                  <p className="text-sm text-muted">{album.description}</p>
                 </div>
               </Link>
             ))}
