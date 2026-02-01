@@ -7,10 +7,10 @@ import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
 import { cn } from "@/lib/utils";
 import { getAlbum, listAlbums } from "@/lib/api";
-import type { AlbumDetail, Photo } from "@/lib/types";
+import type { Album, Photo } from "@/lib/types";
 
 type AlbumDetailProps = {
-  album: AlbumDetail | null;
+  album: Album | null;
   error?: string | null;
 };
 
@@ -22,7 +22,8 @@ export default function AlbumDetail({ album, error }: AlbumDetailProps) {
     if (!selected) {
       return "";
     }
-    return `${selected.caption} · ${new Date(selected.createdAt).getFullYear()}`;
+    const year = selected.year ? ` · ${selected.year}` : "";
+    return `${selected.caption || selected.title || ""}${year}`;
   }, [selected]);
 
   useEffect(() => {
@@ -88,49 +89,35 @@ export default function AlbumDetail({ album, error }: AlbumDetailProps) {
               ← 返回作品
             </Link>
             <p className="text-[11px] uppercase tracking-[0.35em] text-muted">
-              已发布 · {new Date(album.createdAt).getFullYear()}
+              {album.year}
+              {album.location ? " · " + album.location : ""}
             </p>
             <h1 className="text-4xl font-semibold font-display md:text-5xl leading-tight text-ink">
               {album.title}
             </h1>
-            <p className="mt-4 max-w-2xl text-sm leading-7 text-muted">{album.description}</p>
-          </div>
-        </div>
-
-        <div className="w-full bg-white/60">
-          <div className="mx-auto max-w-5xl px-6 py-12">
-            <div className="flex flex-col gap-3">
-              <Link className="text-xs uppercase tracking-[0.28em] text-muted hover:text-ink" href="/albums">
-                ← 返回作品
-              </Link>
-              <p className="text-[11px] uppercase tracking-[0.3em] text-muted">
-                已发布 · {new Date(album.createdAt).getFullYear()}
-              </p>
-              <h1 className="text-4xl md:text-5xl font-semibold font-display text-ink leading-tight">
-                {album.title}
-              </h1>
-              <p className="max-w-3xl text-sm leading-7 text-muted">
-                {album.description}
-              </p>
-            </div>
+            {album.description && (
+              <p className="mt-4 max-w-2xl text-sm leading-7 text-muted">{album.description}</p>
+            )}
           </div>
         </div>
 
         <section className="mt-12 grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 px-2 md:px-3">
-          {album.photos.slice(1).map((photo) => (
+          {album.photos
+            .filter((p) => !p.hidden)
+            .sort((a, b) => a.order - b.order)
+            .map((photo, idx) => (
             <button
-              key={photo.photoId}
+              key={photo.id}
               type="button"
               onClick={() => {
-                const idx = album.photos.findIndex((p) => p.photoId === photo.photoId);
                 setIndex(idx);
                 setSelected(photo);
               }}
               className="group relative overflow-hidden text-left transition"
             >
               <img
-                src={photo.displayUrl}
-                alt={photo.caption}
+                src={photo.src}
+                alt={photo.caption || photo.title || ""}
                 className="h-full w-full rounded-none object-cover transition duration-500 group-hover:scale-105 group-hover:opacity-85 border border-line/60"
               />
             </button>
@@ -156,8 +143,8 @@ export default function AlbumDetail({ album, error }: AlbumDetailProps) {
             </div>
             <div className="relative bg-black">
               <img
-                src={selected.displayUrl}
-                alt={selected.caption}
+                src={selected.src}
+                alt={selected.caption || selected.title || ""}
                 className="max-h-[75vh] w-full object-contain"
               />
               <div className="absolute inset-y-0 left-0 flex items-center pl-3">
@@ -187,7 +174,11 @@ export default function AlbumDetail({ album, error }: AlbumDetailProps) {
             </div>
             <div className="relative flex items-center justify-center text-[11px] tracking-[0.2em] text-white/70">
               <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/55 to-transparent pointer-events-none" />
-              {lightboxLabel}
+              {selected.caption || selected.title || ""}
+              <span className="ml-3 text-[10px] uppercase tracking-[0.2em] text-white/50">
+                {selected.year ? selected.year : ""}
+                {selected.location ? ` · ${selected.location}` : ""}
+              </span>
             </div>
           </div>
         </div>

@@ -69,7 +69,7 @@ export default function Albums({ albums, error }: AlbumsProps) {
               >
                 <div className="aspect-[4/5] overflow-hidden">
                   <img
-                    src={album.coverThumbUrl}
+                    src={album.cover.src}
                     alt={album.title}
                     className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.015]"
                   />
@@ -79,7 +79,7 @@ export default function Albums({ albums, error }: AlbumsProps) {
                     {album.title}
                   </h2>
                   <p className="text-sm leading-7 text-muted">
-                    {album.description}
+                    {album.year} {album.subtitle ? " · " + album.subtitle : ""}
                   </p>
                 </div>
               </Link>

@@ -1,31 +1,44 @@
 {
   "slug": "silent-coast",
   "title": "Silent Coast",
-  "description": "Muted tides, basalt textures, and wind-carved silhouettes.",
-  "coverThumbUrl": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=900&q=75",
-  "createdAt": "2025-10-02T18:00:00.000Z",
-  "status": "published",
+  "subtitle": "风与海的低语",
+  "year": 2025,
+  "location": "Jeju, KR",
+  "category": "landscape",
+  "cover": {
+    "src": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80",
+    "alt": "Sea wave at dawn"
+  },
+  "description": "Muted tides, basalt textures, and wind-carved silhouettes。",
   "photos": [
     {
-      "photoId": "p-01",
-      "thumbUrl": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=600&q=70",
-      "displayUrl": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1400&q=80",
-      "caption": "Dawn tide",
-      "createdAt": "2025-10-03T09:30:00.000Z"
+      "id": "p-01",
+      "src": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80",
+      "title": "Dawn tide",
+      "caption": "黑沙滩上的第一缕光。",
+      "year": 2025,
+      "location": "Jeju, KR",
+      "order": 1
     },
     {
-      "photoId": "p-02",
-      "thumbUrl": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=600&q=70",
-      "displayUrl": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1400&q=80",
-      "caption": "Salt wind",
-      "createdAt": "2025-10-03T10:12:00.000Z"
+      "id": "p-02",
+      "src": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1600&q=80",
+      "title": "Salt wind",
+      "caption": "海风吹皱的裙摆。",
+      "year": 2025,
+      "location": "Jeju, KR",
+      "order": 2
     },
     {
-      "photoId": "p-03",
-      "thumbUrl": "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=600&q=70",
-      "displayUrl": "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1400&q=80",
-      "caption": "Black sand",
-      "createdAt": "2025-10-03T11:02:00.000Z"
+      "id": "p-03",
+      "src": "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1600&q=80",
+      "title": "Black sand",
+      "caption": "玄武岩的肌理。",
+      "year": 2025,
+      "location": "Jeju, KR",
+      "order": 3
     }
-  ]
+  ],
+  "published": true,
+  "publishedAt": "2025-10-02T18:00:00.000Z"
 }

@@ -75,18 +75,18 @@ export default function Home({ albums, error }: HomeProps) {
             <p className="text-[11px] uppercase tracking-[0.35em] text-ink/60">
               本期精选
             </p>
-            <div className="overflow-hidden rounded-xl">
-              <img
-                src={albums[0]?.coverThumbUrl}
-                alt={albums[0]?.title}
-                className="h-full w-full object-cover"
-              />
-            </div>
+              <div className="overflow-hidden rounded-xl">
+                <img
+                  src={albums[0]?.cover.src}
+                  alt={albums[0]?.cover.alt || albums[0]?.title}
+                  className="h-full w-full object-cover"
+                />
+              </div>
             <div className="space-y-1">
               <h2 className="text-2xl font-semibold font-display">{albums[0]?.title}</h2>
               <p className="text-sm text-ink/60">
-                {albums[0] ? new Date(albums[0].createdAt).getFullYear() : ""}
-                {albums[0] ? " · " + albums[0].status : ""}
+                {albums[0]?.year ?? ""}
+                {albums[0]?.location ? " · " + albums[0]?.location : ""}
               </p>
             </div>
           </div>
@@ -108,19 +108,19 @@ export default function Home({ albums, error }: HomeProps) {
               >
                 <div className="aspect-[5/3] overflow-hidden rounded-lg">
                   <img
-                    src={album.coverThumbUrl}
+                    src={album.cover.src}
                     alt={album.title}
                     className="h-full w-full object-cover transition duration-500 group-hover:scale-105 group-hover:opacity-90"
                   />
                 </div>
                 <div className="space-y-1">
                   <p className="text-[11px] uppercase tracking-[0.3em] text-muted">
-                    {album.status} · {new Date(album.createdAt).getFullYear()}
+                    {album.year} {album.location ? " · " + album.location : ""}
                   </p>
                   <h3 className="text-lg font-semibold font-display text-ink group-hover:text-ink/80">
                     {album.title}
                   </h3>
-                  <p className="text-sm text-muted">{album.description}</p>
+                  <p className="text-sm text-muted">{album.subtitle ?? album.description}</p>
                 </div>
               </Link>
             ))}

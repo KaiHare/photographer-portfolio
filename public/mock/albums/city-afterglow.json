@@ -1,31 +1,44 @@
 {
   "slug": "city-afterglow",
   "title": "City Afterglow",
+  "subtitle": "霓虹之后",
+  "year": 2024,
+  "location": "Tokyo, JP",
+  "category": "street",
+  "cover": {
+    "src": "https://images.unsplash.com/photo-1491884662610-dfcd28f30cfb?auto=format&fit=crop&w=1600&q=80",
+    "alt": "Tokyo neon building"
+  },
   "description": "Night light studies across layered streets and neon haze.",
-  "coverThumbUrl": "https://images.unsplash.com/photo-1491884662610-dfcd28f30cfb?auto=format&fit=crop&w=900&q=75",
-  "createdAt": "2024-07-12T17:30:00.000Z",
-  "status": "published",
   "photos": [
     {
-      "photoId": "p-04",
-      "thumbUrl": "https://images.unsplash.com/photo-1491884662610-dfcd28f30cfb?auto=format&fit=crop&w=600&q=70",
-      "displayUrl": "https://images.unsplash.com/photo-1491884662610-dfcd28f30cfb?auto=format&fit=crop&w=1400&q=80",
-      "caption": "Neon drift",
-      "createdAt": "2024-07-14T18:45:00.000Z"
+      "id": "p-04",
+      "src": "https://images.unsplash.com/photo-1491884662610-dfcd28f30cfb?auto=format&fit=crop&w=1600&q=80",
+      "title": "Neon drift",
+      "caption": "夜色中的楼宇呼吸。",
+      "year": 2024,
+      "location": "Tokyo, JP",
+      "order": 1
     },
     {
-      "photoId": "p-05",
-      "thumbUrl": "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=600&q=70",
-      "displayUrl": "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1400&q=80",
-      "caption": "Crosswalk haze",
-      "createdAt": "2024-07-14T19:10:00.000Z"
+      "id": "p-05",
+      "src": "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1600&q=80",
+      "title": "Crosswalk haze",
+      "caption": "人群与霓虹的交叉点。",
+      "year": 2024,
+      "location": "Tokyo, JP",
+      "order": 2
     },
     {
-      "photoId": "p-06",
-      "thumbUrl": "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=600&q=70",
-      "displayUrl": "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1400&q=80",
-      "caption": "Midnight studio",
-      "createdAt": "2024-07-14T20:05:00.000Z"
+      "id": "p-06",
+      "src": "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1600&q=80",
+      "title": "Midnight studio",
+      "caption": "街角的小型录音棚。",
+      "year": 2024,
+      "location": "Tokyo, JP",
+      "order": 3
     }
-  ]
+  ],
+  "published": true,
+  "publishedAt": "2024-07-12T17:30:00.000Z"
 }

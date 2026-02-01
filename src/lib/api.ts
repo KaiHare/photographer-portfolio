@@ -1,4 +1,4 @@
-import type { Album, AlbumDetail } from "./types";
+import type { Album } from "./types";
 import { getMockAlbum, getMockAlbums } from "./mock-data";
 
 const rawApiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL?.trim();
@@ -29,14 +29,14 @@ export async function listAlbums(): Promise<Album[]> {
   return fetchJson<Album[]>("/mock/albums.json");
 }
 
-export async function getAlbum(slug: string): Promise<AlbumDetail | null> {
+export async function getAlbum(slug: string): Promise<Album | null> {
   if (apiBaseUrl) {
-    return fetchJson<AlbumDetail>(`${normalizeBaseUrl(apiBaseUrl)}/albums/${slug}`);
+    return fetchJson<Album>(`${normalizeBaseUrl(apiBaseUrl)}/albums/${slug}`);
   }
 
   if (isServer) {
     return getMockAlbum(slug);
   }
 
-  return fetchJson<AlbumDetail>(`/mock/albums/${slug}.json`);
+  return fetchJson<Album>(`/mock/albums/${slug}.json`);
 }
