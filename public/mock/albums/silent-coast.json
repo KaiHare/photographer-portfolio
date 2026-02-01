@@ -10,6 +10,7 @@
     "alt": "Sea wave at dawn"
   },
   "description": "Muted tides, basalt textures, and wind-carved silhouettes。",
+  "dateRange": { "start": "2025-06" },
   "photos": [
     {
       "id": "p-01",
@@ -18,6 +19,7 @@
       "caption": "黑沙滩上的第一缕光。",
       "year": 2025,
       "location": "Jeju, KR",
+      "takenAt": "2025-10-03",
       "order": 1
     },
     {
@@ -27,6 +29,7 @@
       "caption": "海风吹皱的裙摆。",
       "year": 2025,
       "location": "Jeju, KR",
+      "takenAt": "2025-10-03",
       "order": 2
     },
     {
@@ -36,6 +39,7 @@
       "caption": "玄武岩的肌理。",
       "year": 2025,
       "location": "Jeju, KR",
+      "takenAt": "2025-10-03",
       "order": 3
     }
   ],

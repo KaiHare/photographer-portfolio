@@ -10,6 +10,7 @@
     "alt": "Tokyo neon building"
   },
   "description": "Night light studies across layered streets and neon haze.",
+  "dateRange": { "start": "2024-03", "end": "2024-07" },
   "photos": [
     {
       "id": "p-04",
@@ -18,6 +19,7 @@
       "caption": "夜色中的楼宇呼吸。",
       "year": 2024,
       "location": "Tokyo, JP",
+      "takenAt": "2024-07-14",
       "order": 1
     },
     {
@@ -27,6 +29,7 @@
       "caption": "人群与霓虹的交叉点。",
       "year": 2024,
       "location": "Tokyo, JP",
+      "takenAt": "2024-07-14",
       "order": 2
     },
     {
@@ -36,6 +39,7 @@
       "caption": "街角的小型录音棚。",
       "year": 2024,
       "location": "Tokyo, JP",
+      "takenAt": "2024-07-14",
       "order": 3
     }
   ],

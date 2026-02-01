@@ -8,6 +8,7 @@ const photos: Photo[] = [
     caption: "黑沙滩上的第一缕光。",
     year: 2025,
     location: "Jeju, KR",
+    takenAt: "2025-10-03",
     order: 1,
   },
   {
@@ -17,6 +18,7 @@ const photos: Photo[] = [
     caption: "海风吹皱的裙摆。",
     year: 2025,
     location: "Jeju, KR",
+    takenAt: "2025-10-03",
     order: 2,
   },
   {
@@ -26,6 +28,7 @@ const photos: Photo[] = [
     caption: "玄武岩的肌理。",
     year: 2025,
     location: "Jeju, KR",
+    takenAt: "2025-10-03",
     order: 3,
   },
   {
@@ -35,6 +38,7 @@ const photos: Photo[] = [
     caption: "夜色中的楼宇呼吸。",
     year: 2024,
     location: "Tokyo, JP",
+    takenAt: "2024-07-14",
     order: 1,
   },
   {
@@ -44,6 +48,7 @@ const photos: Photo[] = [
     caption: "人群与霓虹的交叉点。",
     year: 2024,
     location: "Tokyo, JP",
+    takenAt: "2024-07-14",
     order: 2,
   },
   {
@@ -53,6 +58,7 @@ const photos: Photo[] = [
     caption: "街角的小型录音棚。",
     year: 2024,
     location: "Tokyo, JP",
+    takenAt: "2024-07-14",
     order: 3,
   },
   {
@@ -62,6 +68,7 @@ const photos: Photo[] = [
     caption: "黄昏草地的柔光。",
     year: 2023,
     location: "Hokkaido, JP",
+    takenAt: "2023-09-08",
     order: 1,
   },
   {
@@ -71,6 +78,7 @@ const photos: Photo[] = [
     caption: "桦树林的排比节奏。",
     year: 2023,
     location: "Hokkaido, JP",
+    takenAt: "2023-09-08",
     order: 2,
   },
 ];
@@ -88,6 +96,7 @@ const albums: Album[] = [
       alt: "Sea wave at dawn",
     },
     description: "Muted tides, basalt textures, and wind-carved silhouettes。",
+    dateRange: { start: "2025-06" },
     photos: photos.filter((p) => p.location === "Jeju, KR").sort((a, b) => a.order - b.order),
     published: true,
     publishedAt: "2025-10-02T18:00:00.000Z",
@@ -104,6 +113,7 @@ const albums: Album[] = [
       alt: "Tokyo neon building",
     },
     description: "Night light studies across layered streets and neon haze.",
+    dateRange: { start: "2024-03", end: "2024-07" },
     photos: photos.filter((p) => p.location === "Tokyo, JP").sort((a, b) => a.order - b.order),
     published: true,
     publishedAt: "2024-07-12T17:30:00.000Z",
@@ -120,6 +130,7 @@ const albums: Album[] = [
       alt: "Field with soft sunset",
     },
     description: "Quiet afternoon frames, unfiltered and tactile.",
+    dateRange: { start: "2023-04", end: "2023-09" },
     photos: photos.filter((p) => p.location === "Hokkaido, JP").sort((a, b) => a.order - b.order),
     published: false,
     publishedAt: "2023-09-02T09:00:00.000Z",

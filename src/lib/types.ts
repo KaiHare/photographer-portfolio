@@ -7,6 +7,7 @@ export type Photo = {
   caption?: string;
   year?: number;
   location?: string;
+  takenAt?: string; // YYYY-MM-DD
   order: number;
   hidden?: boolean;
 };
@@ -20,6 +21,7 @@ export type Album = {
   category?: "landscape" | "street" | "documentary" | "portrait" | "commercial";
   cover: { src: string; alt?: string };
   description?: string;
+  dateRange?: { start: string; end?: string };
   photos: Photo[];
   published: boolean;
   publishedAt?: string;

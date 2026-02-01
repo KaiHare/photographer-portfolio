@@ -174,11 +174,13 @@ export default function AlbumDetail({ album, error }: AlbumDetailProps) {
             </div>
             <div className="relative flex items-center justify-center text-[11px] tracking-[0.2em] text-white/70">
               <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/55 to-transparent pointer-events-none" />
-              {selected.caption || selected.title || ""}
-              <span className="ml-3 text-[10px] uppercase tracking-[0.2em] text-white/50">
-                {selected.year ? selected.year : ""}
-                {selected.location ? ` · ${selected.location}` : ""}
-              </span>
+              <div className="flex flex-col items-center gap-1">
+                <span>{selected.caption || selected.title || ""}</span>
+                <span className="text-[10px] uppercase tracking-[0.2em] text-white/55">
+                  {selected.takenAt ? selected.takenAt : ""}
+                  {selected.location ? ` · ${selected.location}` : ""}
+                </span>
+              </div>
             </div>
           </div>
         </div>
