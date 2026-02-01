@@ -20,16 +20,6 @@ export function SiteHeader() {
           <Link className="pb-1 border-b border-transparent hover:text-ink hover:border-ink" href="/admin">
             管理
           </Link>
-          <a
-            className={cn(
-              buttonVariants({ size: "sm", variant: "outline" }),
-              "h-8 px-4 text-[11px] font-medium tracking-[0.2em] bg-transparent text-muted hover:text-ink hover:border-ink",
-              "border border-line hover:border-ink"
-            )}
-            href="mailto:studio@lumiere.example"
-          >
-            预约拍摄
-          </a>
         </nav>
       </div>
       <div className="h-px w-full bg-line" />
