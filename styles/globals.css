@@ -1,16 +1,18 @@
 @import "tailwindcss";
 
 :root {
-  color-scheme: light;
-  --paper: #f3ede5;
-  --ink: #1b1b1b;
-  --muted: #6a6a6a;
-  --line: rgba(27, 27, 27, 0.07);
-  --ink-strong: #101010;
-  --lightbox-bg: rgba(0, 0, 0, 0.9);
-  --accent-1: #f6cfe0; /* very light sakura */
-  --accent-2: #c7ddf6; /* sky tint */
-  --accent-3: #cbe7d6; /* soft mint */
+  color-scheme: dark;
+  --paper: #05050a; /* Dark space background */
+  --ink: #f8fafc; /* Bright starlight text */
+  --muted: #94a3b8; /* Muted starlight */
+  --line: rgba(255, 255, 255, 0.1);
+  --ink-strong: #ffffff;
+  --surface: rgba(10, 15, 30, 0.4);
+  --surface-strong: rgba(15, 20, 40, 0.6);
+  --accent-warm: #d946ef; /* Neon Pink/Purple */
+  --accent-cold: #06b6d4; /* Neon Cyan */
+  --accent-earth: #8b5cf6; /* Deep Violet */
+  --lightbox-bg: rgba(0, 0, 0, 0.95);
 }
 
 * {
@@ -19,7 +21,7 @@
 
 body {
   margin: 0;
-  background: var(--paper);
+  background-color: var(--paper);
   color: var(--ink);
 }
 
@@ -35,21 +37,172 @@ a {
 }
 
 .container-padded {
-  max-width: 1120px;
+  max-width: 1180px;
   margin: 0 auto;
   padding: 0 24px;
 }
 
+/* Starry Sky Background Layer */
 .grain {
   position: relative;
+  isolation: isolate;
+  background-color: #05050a;
+  background-image: 
+    radial-gradient(1px 1px at 10% 10%, #fff 100%, transparent),
+    radial-gradient(1px 1px at 20% 40%, #fff 100%, transparent),
+    radial-gradient(2px 2px at 30% 80%, #fff 100%, transparent),
+    radial-gradient(1px 1px at 40% 20%, #fff 100%, transparent),
+    radial-gradient(1.5px 1.5px at 50% 50%, #fff 100%, transparent),
+    radial-gradient(1px 1px at 60% 90%, #fff 100%, transparent),
+    radial-gradient(2px 2px at 70% 30%, #fff 100%, transparent),
+    radial-gradient(1px 1px at 80% 70%, #fff 100%, transparent),
+    radial-gradient(1px 1px at 90% 10%, #fff 100%, transparent);
+  background-size: 200px 200px;
+  animation: stars-drift 100s linear infinite;
 }
 
 .grain::before {
   content: "";
   position: fixed;
   inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
-  opacity: 0.35;
+  background-image: url("data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.15'/%3E%3C/svg%3E");
+  opacity: 0.15;
   pointer-events: none;
-  mix-blend-mode: multiply;
+  mix-blend-mode: overlay;
+  z-index: -2;
+}
+
+.ambient-stage {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Nebulas / Glowing Orbs */
+.orb {
+  position: absolute;
+  filter: blur(60px);
+  border-radius: 999px;
+  opacity: 0.6;
+  animation: drift 14s ease-in-out infinite alternate;
+  mix-blend-mode: screen;
+}
+
+.orb-a {
+  width: 500px;
+  height: 500px;
+  left: -200px;
+  top: -100px;
+  background: radial-gradient(circle at center, rgba(6, 182, 212, 0.15), transparent 60%); /* Cyan */
+}
+
+.orb-b {
+  width: 600px;
+  height: 600px;
+  right: -200px;
+  top: 200px;
+  background: radial-gradient(circle at center, rgba(217, 70, 239, 0.12), transparent 60%); /* Pink */
+  animation-delay: 1.5s;
+}
+
+.orb-c {
+  width: 400px;
+  height: 400px;
+  right: 30%;
+  bottom: -100px;
+  background: radial-gradient(circle at center, rgba(139, 92, 246, 0.15), transparent 60%); /* Violet */
+  animation-delay: 2.5s;
+}
+
+/* Tech Glassmorphism */
+.glass-panel {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(165deg, var(--surface-strong), var(--surface));
+  box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  transition: all 0.3s ease;
+}
+
+.glass-panel:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 32px -1px rgba(6, 182, 212, 0.1), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+}
+
+.line-fade {
+  position: relative;
+}
+
+.line-fade::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.15), transparent);
+}
+
+.reveal-up {
+  opacity: 0;
+  transform: translateY(18px);
+  animation: reveal-up 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.delay-1 {
+  animation-delay: 0.14s;
+}
+
+.delay-2 {
+  animation-delay: 0.28s;
+}
+
+.delay-3 {
+  animation-delay: 0.4s;
+}
+
+@keyframes reveal-up {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes drift {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    transform: translate(30px, -20px) scale(1.1);
+  }
+}
+
+@keyframes stars-drift {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: -200px 200px;
+  }
+}
+
+@media (max-width: 720px) {
+  .container-padded {
+    padding: 0 18px;
+  }
+
+  .orb {
+    opacity: 0.4;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orb,
+  .reveal-up,
+  .grain {
+    animation: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
 }

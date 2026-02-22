@@ -1,11 +1,17 @@
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
-import { Noto_Sans_SC, Noto_Serif_SC } from "next/font/google";
+import { Cormorant_Garamond, Noto_Sans_SC, Noto_Serif_SC } from "next/font/google";
+
+const display = Cormorant_Garamond({
+  subsets: ["latin"],
+  variable: "--font-display",
+  weight: ["500", "600", "700"],
+});
 
 const serif = Noto_Serif_SC({
   subsets: ["latin"],
   variable: "--font-serif",
-  weight: ["500", "600"],
+  weight: ["500", "600", "700"],
 });
 
 const sans = Noto_Sans_SC({
@@ -16,7 +22,7 @@ const sans = Noto_Sans_SC({
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <div className={`app-root ${serif.variable} ${sans.variable}`}>
+    <div className={`app-root ${display.variable} ${serif.variable} ${sans.variable}`}>
       <Component {...pageProps} />
     </div>
   );
